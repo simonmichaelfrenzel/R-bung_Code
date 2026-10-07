@@ -1,7 +1,3 @@
-#test
-# test test 
-# test test test 
-
 # 1. Einheit ---------------------------------------------------------------
 
 # R-Studio-Umgebung erklären
