@@ -9,7 +9,7 @@
 # 1) RStudio-Oberfläche erklären (vier Fenster):
 #    - Links oben:  SOURCE   -> hier schreiben wir unser Skript (wird gespeichert)
 #    - Links unten: CONSOLE  -> hier wird Code ausgeführt (wird NICHT gespeichert)
-#    - Rechts oben: ENVIRONMENT -> alle Objekte, die wir erstellt haben
+#    - Rechts oben: ENVIRONMENT -> alle Objekte, die wir erstellt haben  = "Gedächtnis"
 #    - Rechts unten: FILES / PLOTS / PACKAGES / HELP
 #    Merksatz: Alles, was wir später nochmal brauchen, gehört ins Skript,
 #    nicht in die Konsole.
@@ -26,7 +26,7 @@
 #    Alles mit "#" davor ist ein KOMMENTAR und wird von R ignoriert.
 #    Kommentare schreiben wir für unser zukünftiges Ich und für andere.
 #
-# Weitere Inhalte zum Herzeigen: Markdown-Vorlage, Pakete allgemein, Bookdown
+# Weitere Inhalte zum Herzeigen: Markdown-Vorlage, Pakete allgemein, Bookdown, Onlineübungen
 
 
 # 1 | R ALS TASCHENRECHNER -----------------------------------------------------
