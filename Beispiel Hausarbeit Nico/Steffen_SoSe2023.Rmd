@@ -1,0 +1,499 @@
+---
+title             : |
+   ![](Logo_CFSH_211228.png){width=3in}  
+   **Der Bystander-Effekt im Kontext von Cybermobbing: Eine randomisierte Studie zur Untersuchung sozialer Dynamiken in einer digitalen Umgebung**
+  
+shorttitle        : "Der Bystander-Effekt im Kontext von Cybermobbing"
+
+author: 
+  - name          : "Nico Steffen"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Infantriestraße 11a, 80797 München"
+    email         : "steffen.nico@stud.charlotte-fresenius-uni.de"
+  - name          : "Magdalena Schellenberger"
+    affiliation   : "2"
+    role:    
+  - name          : "Luisa Greer"
+    affiliation   : "3"
+    role:  
+  - name          : "Victoria Sackmann"
+    affiliation   : "4"
+    role:   
+       
+
+affiliation:
+  - id            : "1"
+    institution   : "Mat. Nr.: 400334811"
+  - id            : "2"
+    institution   : "Mat. Nr.: 400344115"
+  - id            : "3"
+    institution   : "Mat. Nr.: 400342977"
+  - id            : "4"
+    institution   : "Mat. Nr.: 400301765"
+
+authornote: |
+   Charlotte Fresenius Hochschule, Standort München. Wir bekennen uns zu den Werten der Offenheit und Transparenz in der Wissenschaft (http://www.researchtransparency.org/). Daten und Materialien sind unter XX zu finden. Die Hypothesen und Analysen wurden bei XX präregistriert, Änderungen am Analyseplan werden im Manuskript transparent dargestellt. Die Vorabregistrierung entspricht den Offenlegungsanforderungen des institutionellen Registers. 
+
+abstract: |
+
+  In den jüngsten Jahren haben die rasche Verbreitung digitaler Technologien neue Dimensionen der zwischenmenschlichen Kommunikation geschaffen, die nicht allein positive Auswirkungen auf unsere sozialen Interaktionen mit sich bringen. Ein beunruhigendes Phänomen, das in diesem Zusammenhang aufgetreten ist, ist Cybermobbing – eine Form des aggressiven Verhaltens, bei der Einzelpersonen absichtlich und wiederholt schädigende Handlungen gegenüber anderen in Online-Plattformen oder sozialen Medien ausführen. In diesem Kontext verfolgt die vorliegende Studie das Ziel, die sozialpsychologischen Auswirkungen des Bystander-Effekts in einer digitalen Umgebung zu untersuchen. Der klassische Bystander-Effekt wurde erstmals 1968 von John Darley und Bibb Latané beschrieben und beschreibt das Phänomen, dass eine Person in einer Notfallsituation mit zunehmender Anzahl von Zuschauern (engl. Bystander) weniger wahrscheinlich Hilfe leistet. In der vorliegenden Studie konnten wir den Bystander-Effekt in einer Stichprobe von N = 158 (87 Frauen [55%]; Durchschnittsalter ± SD 36,2 Jahre ± 12,2 Jahre) replizieren und zeigen, dass der Effekt auch in einem digitalen Kontext relevant ist. Unsere Ergebnisse stimmen mit einer Vielzahl von Studien überein, die den Bystander-Effekt in analogen Umgebungen untersucht haben. Bislang beschäftigten sich jedoch weniger Studien mit dem Effekt in einem Web-Kontext. Angesichts der rasanten Entwicklungen in digitalen Medien und sozialen Netzwerken möchten wir den Diskurs über die negativen psychologischen, emotionalen und sozialen Auswirkungen für Opfer digitaler Gewalt fördern und gleichzeitig neue Perspektiven für zukünftige Forschung zur effektiven Prävention und Intervention von Cybermobbing anregen.
+  
+keywords          : "Bystander-Effect, Bystander, Cyberbullying, Aggression, Internet"
+wordcount         : "2132"
+
+bibliography      : ["r-references.bib"]
+
+floatsintext      : yes
+figurelist        : no
+tablelist         : yes
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+numbersections    :
+
+documentclass     : "apa7"
+classoption       : "man"
+output            : papaja::apa6_docx
+csl               : "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
+---
+
+```{r setup, include = FALSE}
+setwd("/Users/nicosteffen/Library/Mobile Documents/com~apple~CloudDocs/Documents/02 Studium/CFH/2. Semester/Wiss. Arbeiten/R/Mini Paper")
+library(report)
+library(emmeans)
+library(dplyr)
+library(ggplot2)
+library(apaTables)
+library(ggthemes)
+library(papaja)
+library(knitr)
+library(kableExtra)
+library(tidyverse)
+library(papaja)
+library(flextable)
+library(lavaan)
+library(semTable)
+library(officer)
+library(ICC)
+library(car)
+library(olsrr)
+library(psych)
+library(afex)
+library(performance)
+
+#Aufbereitung der Daten
+
+
+bystander = read.csv("Bystander.csv", header = TRUE)
+
+bystander$STAI_1 = dplyr::recode(bystander$STAI_1, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_2 = dplyr::recode(bystander$STAI_2, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_5 = dplyr::recode(bystander$STAI_5, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_8 = dplyr::recode(bystander$STAI_8, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_10 = dplyr::recode(bystander$STAI_10, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_11 = dplyr::recode(bystander$STAI_11, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_15 = dplyr::recode(bystander$STAI_15, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_16 = dplyr::recode(bystander$STAI_16, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_19 = dplyr::recode(bystander$STAI_19, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_20 = dplyr::recode(bystander$STAI_20, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_21 = dplyr::recode(bystander$STAI_21, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_23 = dplyr::recode(bystander$STAI_23, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_26 = dplyr::recode(bystander$STAI_26, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_27 = dplyr::recode(bystander$STAI_27, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_30 = dplyr::recode(bystander$STAI_30, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_33 = dplyr::recode(bystander$STAI_33, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_34 = dplyr::recode(bystander$STAI_34, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_36 = dplyr::recode(bystander$STAI_36, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bystander$STAI_39 = dplyr::recode(bystander$STAI_39, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+
+bystander$STAI_ges = rowSums(bystander[grep("STAI", colnames(bystander))])
+bystander$STAI_State = rowSums(bystander[,c(10 : 29)])
+bystander$STAI_Trait = rowSums(bystander[,c(30 : 49)])
+
+bystander_numeric = bystander 
+
+bystander$groups <- factor(bystander$groups)
+
+#Zentrierung STAI_STate für Regression
+
+bystander$STAI_State_cent = bystander$STAI_State - mean(bystander$STAI_State)
+
+
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Einleitung
+
+Der Bystander-Effekt beschreibt ein sozialpsychologisches Phänomen, nach welchem die Wahrscheinlichkeit, in einer Notfallsituation Hilfe zu leisten, mit steigender Anzahl an Zuschauern (engl. Bystander) abnimmt [@darley2020latane; @latanedarley1986; @latane1970unresponsive]. Darley und Latané nahmen den grausamen Mord an Kitty Genovese 1964 in Queens, New York, welcher vermeintlich von 38 Zeugen beobachtet wurde, zum Anlass, ihre ersten Studien zum Bystander-Effekt durchzuführen und diesen als solchen zu benennen. Über die genaue Anzahl an Bystandern im Falle Genovese herrscht allerdings keine endgültige Einigung [@2007-13085-00120070901]. Jedoch wurde auch in jüngerer Zeit der Effekt auf traurige Art und Weise demonstriert: 2009 schritt Dominik Brunner ein, um Kinder zu retten, welche von zwei 18 Jährigen attackiert wurden. Bei dem Versuch, den Kindern zu helfen, wurde Dominik Brunner selbst zum Opfer und wurde von eben jenen Angreifern tödlich verletzt. Zahlreiche Passanten wurden Zeugen des Vorfalls und schritten nicht ein.
+
+Doch auch über diese tragischen Geschichten von Einzelfällen hinausgehend gibt es zahlreiche Evidenz die auf einen Bystander-Effekt, wie von Darley und Latané initial beschrieben hinweisen. Ein gutes Review zur Studienlage vor 1981 liefern @latane1981ten. Trotz der beeindruckenden Beweise für den "non-helping-bystander-effect", gibt es auch Fälle, die diesem Muster widersprechen. Es gibt Situationen, in denen die Präsenz von Unbeteiligten tatsächlich Zivilcourage begünstigt. So konnten @fischer2006unresponsive zeigen, dass der Effekt verschwinden kann, wenn der Notfall ein besonders gefährlicher ist. 
+
+@darley2020latane [@darley2020latane]
+
+Trotz der deutlichen Unterschiede zwischen analogen und digitalen Umgebungen stellt sich die Frage, ob der Bystander-Effekt weiterhin relevant ist, wenn soziale Interaktionen online stattfinden. Insbesondere im Fall von Cybermobbing könnte der Bystander-Effekt eine bedeutende Rolle spielen, da die Anonymität und die vermeintliche Distanz, die das Internet bietet, übergriffiges Verhalten begünstigen könnten. Obwohl erste Studien den Bystander-Effekt bereits online [@markey2000bystander; @van2012aware] und im Kontext von Cybermobbing-Situationen [@song2018factors] nachweisen konnten, konzentriert sich ein Großteil der existierenden Forschung auf die Untersuchung des Effekts in der analogen Welt. Gerade vor dem Hintergrund der gravierenden negativen Auswirkungen von Cybermobbing auf die psychische Gesundheit der Opfer [@campbell2013victims; @agatston2012cyberbullying; @schneider2012cyberbullying] sind wir besonders daran interessiert daran, die Forschung zum Bystander-Effekt in einem digitalen Kontext voranzutreiben. 
+
+Ziel der vorliegenden Studie ist es daher, den Bystander-Effekt im Rahmen von Mobbing-Situationen in Online-Foren zu untersuchen. Im Kern geht es darum, Einblicke in die Dynamiken des Bystander-Effekts im Bereich virtueller Interaktionen zu geben und so proaktiv Strategien zur Bekämpfung von Cybermobbing zu erforschen. Um dieses Ziel zu erreichen, wurden Beiträge in Diskussionsforen verwendet, die simulierte Fälle von Mobbingverhalten enthielten, um zu untersuchen, wie andere Nutzer auf diese Situationen reagierten. Die Gruppengröße der Bystander, wurde über die Anzahl von Views auf die Nachrichten der gemobbten Person operationalisiert. Dazu simulieren wir 3x Bedingungen: *"Gruppe5"* = 5 Bystander, *"Gruppe20"* = 20 Bystander, *"Gruppe100"* = 100 Bystander. Die Versuchspersonen erhielten Zugriff auf das Forum und füllten zusätzlich psychometrische Skalen aus. Unsere **Haupthypothese** lautet:
+
+**H1**: Wir finden den klassischen Bystander-Effekt auch in einem digitalen Kontext: Je größer die Gruppengröße (UV), desto länger die durchschnittliche Zeit (AV), bis die Versuchspersonen in die simulierte Mobbingsituation eingreifen (gemessen in Minuten). 
+
+Zusätzlich wird untersucht, inwiefern das Geschlecht (UV) der Versuchspersonen eine Rolle bei der Hilfeleistung spielt. Unsere **zweite Hypothese** lautet:
+
+**H2**: Frauen schreiten in unserem Versuchsaufbau insgesamt schneller ein, als Männer dies tun.
+
+Eine weitere Fragestellung konzentriert sich auf mögliche Moderatoren im Zusammenhang mit dem Bystander Effekt. Das Ziel ist es, Erklärungen zu finden, warum einige Personen aus derselben Gruppe schnell Hilfe anbieten und einige dies erst nach geraumer Zeit tun. Unsere **dritte Hypothese** lautet:
+
+**H3**: Die berichtete Zustandsangst (UV) der Versuchspersonen hat innerhalb der jeweiligen Gruppe eine Vorhersagekraft bezogen auf die gemessene Zeit bis zur Hilfeleistung in Minuten (AV). Es wird angenommen, dass dieser Effekt sich zwischen den Gruppen unterschiedlich verhält. 
+
+# Methode
+
+## Stichprobenbeschreibung
+
+Eine Poweranalyse für eine zweifaktoriellen ANOVA mit Interaktion mit den mehrstufigen Faktoren Gruppengröße (5, 20, 100) und Geschlecht (weiblich vs. männlich) ergab unter Annahme eines Signifikanzniveaus von $\alpha$ =.05, einer mittleren Effekstärke von Cohen's *f* = 0.25 und einer Power (1-$\beta$) von .80 eine Stichprobengröße von N = 158 Proband:innen.
+
+Wir konnten die angestrebten N = `r describe(bystander$Age)$n` Personen (davon 87 Frauen[55%]) für die Teilnahme an unserer Studie gewinnen. Das Durchschnittsalter der Versuchspersonen lag bei `r describe(bystander$Age)$mean` Jahren ± eine Standardabweichung von `r describe(bystander$Age)$sd` Jahren. Die Personen wurden im Zeitraum von Januar 2022 bis August 2022 über Anzeigen auf Online-Plattformen rekrutiert. Die Durchführung unserer Studie fand von August 2022 bis November 2022 statt. Es wurde die formelle Genehmigung zur Durchführung der Untersuchung bei der Ethikkommission der DGP eingeholt. Die Studie wurde in Übereinstimmung mit der Deklaration von Helsinki durchgeführt, und alle Verfahren wurden mit dem angemessenen Verständnis und der schriftlichen Zustimmung der Teilnehmenden durchgeführt. Die Proband:innen wurden unter Verwendung eines Randomisierungsalgorithmus mittels für Alter und Geschlecht stratifizierter Blockrandomisierung mit zufälligen Blockgrößen zufällig den 3 Bedingungen zugeteilt.
+
+## Messinstrumente
+
+Folgende Messinstrumente wurden verwendet:
+
+**Soziodemographische Daten:** Daten wie Alter, Geschlecht, Beziehungsstatuts, frühere psychische Störungen und der Bildungsstand wurden über einen selbst konzipierten Fragebogen erhoben.
+
+**State-Trait-Angstinventar (STAI)**: Wir verwenden die deutsche Version [@spielberger2001state] des State-Trait Anxiety Inventory [@spielberger1970], um das Konstrukt der Zustandsangst zu messen. Der Selbstberichts-Fragebogen umfasst insgesamt 40 Items, wobei 20 Fragen zur Erfassung von Zustandsangst und 20 Fragen zu Erfassung von Angst als Eigenschaft dienen. Da in der Trait-Skala (Eigenschaftsangst) keine situative Veränderung zu erwarten ist, arbeiten wir in unserer Studie mit der State-Skala (Zustandsangst), welche sich auf das momentane Befinden der Versuchspersonen bezieht und eine deutliche Zeit- und Situationsabhängigkeit aufweist. Die interne Konsistenz der STAI-Skalen liegen für verschiedene Stichproben im Bereich von Crohnbach's $\alpha$ = .88 bis .94 für die Trait-Skala und Crohnbach's $\alpha$ = .90 bis .94 für die State-Skala. Die State-Skala weist eine Test-Retest-Reliabilität von *r* = .68 bis .96 auf. Die gemessenen Abstände zwischen den Testungen lagen zwischen einer Stunde und 73 Tagen. Die Trait-Skala weist erwartungsgemäß eine schlechtere Retest-Reliabilität von *r* = .03 (59 Tage) und *r* = .76 (1 Stunde) auf [@spielberger2001state].
+
+Alle weiteren, für die statistische Auswertung relevanten Daten, wurden anhand der Aktivitäten in den Online-Foren automatisiert aufgezeichnet.
+
+## Statistische Analyse
+
+```{r include=FALSE}
+#Check der Voraussetzungen
+
+#MANOVA
+model1 = lm(Time ~ groups * Gender, data = bystander)
+check_homogeneity(model1)
+
+#Multiple Regressionen
+
+model2 = lm(Time ~ groups * STAI_State_cent, data = bystander)
+
+#Linearität model2
+plot(bystander$STAI_State_cent, bystander$Time)
+lin.stai = lm(bystander$Time ~ bystander$STAI_State_cent, na.action = "na.exclude")
+abline(lin.stai)
+
+plot(bystander$groups, bystander$Time)
+lin.groups = lm(bystander$Time ~ bystander$groups, na.action = "na.exclude")
+abline(lin.groups)
+
+#Normalverteilung der Residuen
+qqnorm(rstandard(model2), cex = 1.5)
+qqline(rstandard(model2))
+
+shapiro.test(rstandard(model2))
+
+#Homoskedastizität
+plot(model2, which = 1)
+
+#Multikollinearität
+
+cor(bystander_numeric[,c("groups", "STAI_State")])
+ols_vif_tol(lm(Time ~ groups + STAI_State, data = bystander_numeric))
+
+```
+
+Alle Analysen wurden mit der Satistik Software R durchgeführt [@core2015team].
+
+## Zweifaktorielle ANOVA
+
+Die Hypothesen **H1** und **H2** werden mittels zweifaktorieller ANOVA mit Interaktion und nachfolgender Post Hoc Analyse ausgewertet. Die Hypothese **H1** wird bei einem signifikanten Haupteffekt der Gruppengröße und einer nachfolgenden Post Hoc Analyse, die auf den angenommenen Effekt hindeutet, angenommen. Die **H2** wird bei einem signifikanten Haupteffekt des Geschlechts und ebenfalls einer nachfolgenden Post Hoc Analyse, die auf den angenommenen Effekt hindeutet, angenommen. Die entsprechenden Voraussetzungen für eine zweifaktorielle ANOVA wurden überprüft (s. Anhang)
+
+## Multiple Regression mit Interaktion
+
+Die Hypothese **H3** überprüfen wir multipler linearer Regressionen mit Interaktion. Für jede Gruppenbedingung (5, 20, 100 Bystander) wird überprüft, ob die berichtete Zustandsangst, operationalisiert über die angegebenen STAI_State Werte, eine signifikante Vorhersagekraft bezogen auf das Kriterium "Zeit bis zur Hilfeleistung" aufweist. Zusätzlich Interessiert uns eine mögliche Moderationswirkung der Gruppenvariable bezogen auf den Effekt des STAI_State Werts. Die Voraussetzungen für eine multiple Regression wurden geprüft. (s. Anhang) *[Anmerkung: Es scheint ein mögliches Multikollinearitätsproblem vorzuliegen. Die STAI_State Werte korrelieren stark mit der Gruppenvariable. Dieser Effekt war jedoch anzunehmen und wir kontrollieren den Effekt des STAI_State über die Gruppen hinweg]*
+
+# Ergebnisse
+
+```{r include=FALSE}
+#H1 + 2
+anova(model1)
+ES1 = effectsize::omega_squared(model1)
+effectsize::interpret_omega_squared(ES1)
+results1 = anova(model1)
+
+#PostHoc
+emmeans(model1, pairwise ~ groups)
+
+fit = emmeans(model1, pairwise ~ groups)$emmeans
+d = as.data.frame(fit)
+colnames(d) = gsub("groups", "Gruppe", colnames(d))
+colnames(d) = gsub("emmean", "Mittelwert", colnames(d))
+
+fit2 = emmeans(model1, pairwise ~ groups)$contrasts
+d2 = as.data.frame(fit2)
+colnames(d2) = gsub("contrast", "Gruppenvergleich", colnames(d2))
+colnames(d2) = gsub("estimate", "Mittelwertsunterschied", colnames(d2))
+colnames(d2) = gsub("t.ratio", "t-Wert", colnames(d2))
+colnames(d2) = gsub("p.value", "p-Wert", colnames(d2))
+```
+
+## Hypothese H1
+
+Das Ergebnis der zweifaktoriellen ANOVA mit Interaktion mit den UVs "Gruppe - 3 Stufen" und "Geschlecht - 2 Stufen" und der AV "Zeit bis zum Eingreifen in Minuten" weist ein signifikantes Ergebnis in der Überprüfung des Haupteffekts "Gruppe" auf: *F*(`r results1$Df[1]`, `r model1$df.residual`) = `r round(results1$"F value"[1],2)`, $p < .001$, $\omega^2{partial}$ = `r round(ES1$Omega2_partial[1],2)`
+
+Die Ergebnisse der TukeyHSD PostHoc Analyse sind in (*table1*) dargestellt.
+
+```{r}
+
+apa_table(
+  d,
+   caption = "table.1",
+   note = "SE = Standardabweichung, df = Freiheitsgrade, lower.CL + upper.CL = 95% Konfidenzintervall",
+   escape = TRUE
+)
+
+```
+
+Der paarweise Gruppenvergleich ergab signifikante Mittelwertsunterschiede zwischen allen Gruppen hinsichtlich der AV "Zeit bis zum Eingreifen in Minuten (*table2*)
+
+```{r}
+
+apa_table(
+  d2,
+   caption = "table.2",
+   note = "SE = Standardabweichung, df = Freiheitsgrade",
+   escape = TRUE
+)
+
+```
+
+## Hypothese H2
+
+```{r include=FALSE}
+
+#PostHoc
+emmeans(model1, pairwise ~ Gender)
+
+fit3 = emmeans(model1, pairwise ~ Gender)$emmeans
+d3 = as.data.frame(fit3)
+colnames(d3) = gsub("Gender", "Geschlecht", colnames(d3))
+colnames(d3) = gsub("emmean", "Mittelwert", colnames(d3))
+d3$Geschlecht = gsub("female", "Frauen", d3$Geschlecht)
+d3$Geschlecht = gsub("male", "Männer", d3$Geschlecht)
+
+fit4 = emmeans(model1, pairwise ~ Gender)$contrasts
+d4 = as.data.frame(fit4)
+colnames(d4) = gsub("contrast", "Gruppenvergleich", colnames(d4))
+colnames(d4) = gsub("estimate", "Mittelwertsunterschied", colnames(d4))
+colnames(d4) = gsub("t.ratio", "t-Wert", colnames(d4))
+colnames(d4) = gsub("p.value", "p-Wert", colnames(d4))
+```
+
+Der Haupteffekt "Geschlecht" wird ebenfalls signifikant: *F*(`r results1$Df[2]`, `r model1$df.residual`) = `r round(results1$"F value"[2],2)`, $p = .04$, $\omega^2{partial}$ = `r round(ES1$Omega2_partial[2],2)`. Ein Interaktionseffekt von Geschlecht x Gruppe ist nicht gegeben: *F*(`r results1$Df[3]`, `r model1$df.residual`) = `r round(results1$"F value"[3],2)`, $p = .174$, $\omega^2{partial}$ = `r round(ES1$Omega2_partial[3],2)`
+
+Die Ergebnisse der TukeyHSD PostHoc Analyse sind in (*table3*) dargestellt.
+
+```{r}
+
+apa_table(
+  d3,
+   caption = "table.3",
+   note = "SE = Standardabweichung, df = Freiheitsgrade, lower.CL + upper.CL = 95% Konfidenzintervall",
+   escape = TRUE
+)
+
+```
+
+Der paarweise Gruppenvergleich ergab einen signifikanten Mittelwertsunterschied zwischen Männern und Frauen in der AV "Zeit bis zum Eingreifen in Minuten" (*table4*)
+
+```{r}
+
+apa_table(
+  d4,
+   caption = "table.4",
+   note = "SE = Standardabweichung, df = Freiheitsgrade",
+   escape = TRUE
+)
+
+```
+
+## Hypothese H3
+
+```{r include=FALSE}
+#H3
+
+model2_20 = lm(Time ~ relevel(groups, "20") * STAI_State_cent, data = bystander)
+model2_100 = lm(Time ~ relevel(groups, "100") * STAI_State_cent, data = bystander)
+
+r2 = summary(model2)
+r3 = summary(model2_20)
+r4 = summary(model2_100)
+
+r5 = emtrends(model2, pairwise ~ groups, var = "STAI_State_cent")
+
+
+
+```
+
+Für die Auswertung der multiplen Regression wurde die Variable STAI_State für eine sinnvollere Interpretierbarkeit zentriert (Grand-Mean Zentrierung). Um die Steigungsparameter der Zustandsangst (STAI_State) innerhalb der einzelnen Gruppen zu erhalten, wurde die Dummy Gruppenvariable entsprechend umkodiert. 
+
+Die multiple Regression mit Interaktion liefert folgende Ergebnisse:
+
+Innerhalb der Gruppe mit **5 Bystandern** kann der Prädiktor Zustandsangst ("STAI_State") das Kriterium "Zeit bis zum Eingreifen in Minuten" signifikant vorhersagen: $\beta$ = `r round(r2$coefficients[4,1],2)`, t(`r r2$df[2]`) = `r round(r2$coefficients[4,3],2)`, $p < .001$)
+
+Innerhalb der Gruppe mit **20 Bystandern** wird der Effekt ebenfalls signifikant: $\beta$ = `r round(r3$coefficients[4,1],2)`, t(`r r3$df[2]`) = `r round(r3$coefficients[4,3],2)`, $p = .027$)
+
+Für die Gruppe mit **100 Bystandern** finden wir keinen signifikanten Effekt: $\beta$ = `r round(r4$coefficients[4,1],2)`, t(`r r4$df[2]`) = `r round(r4$coefficients[4,3],2)`, $p = .464$)
+
+Eine signifikante Interaktion zeigt, dass sich der Effekt der Zustandsangst sich zwischen der Gruppe mit 5 Bystandern und der Gruppe mit 100 Bystandern signifikant unterscheidet (($\Delta$$\beta$) = `r round(r2$coefficients[6,1],2)`, t(`r r2$df[2]`) = `r round(r2$coefficients[6,3],2)`, $p = .006$). Insgesamt können wir mit unserem Modell `r round(r2$r.squared * 100,2)`% der Varianz in unserer Abhängigen Variable "Zeit bis zum Eingreifen in Minuten" erklären ($R^2$ = `r round(r2$r.squared,4)`)
+
+# Discussion
+
+## Ergebnisse
+
+Das Hauptziel der vorliegenden Studie war die Untersuchung der Frage, ob das sozialpsychologische Phänomen des Bystander-Effekts auch in einem digital-Kontext von Relevanz sein kann. Übereinstimmend mit unserer **Haupthypothese (H1)** konnten wir diesen Effekt nachweisen. Wie vermutet ergab unsere Analyse, dass mit steigender Anzahl an Bystandern die Zeit bis zum Eingreifen in Minuten zunimmt. Die signifikanten Mittelwertsunterschiede sind in *table1 + table2* verdeutlicht. Mit einer Effektstärke von $\omega^2{partial}$ = `r round(ES1$Omega2_partial[1],2)` konnte ein großer Effekt nach den Konventionen von Cohen nachgewiesen werden.
+
+Passend zu unserer **zweiten Hypothese (H2)** konnte gezeigt werden, dass Frauen etwas schneller bereit sind, Hilfeleistung zu zeigen. Der Effekt des Geschlechts zeigt keine signifikanten Unterschiede über die verschiedenen Gruppen hinweg (Insignifikanter Interaktionseffekt für $p = .174$ ). Ingesamt ist der Haupteffekt des Geschlechts mit einer Effektstärke von $\omega^2{partial}$ = `r round(ES1$Omega2_partial[2],2)` nach den Konventionen von Cohen als niedrig einzustufen und sollte daher vorsichtig interpretiert werden. Die eben beschriebenen Effekte sind in (*figure1*) dargestellt.
+
+```{r my-figure, fig.cap = "Ergebnisse zweifaktorielle ANOVA (H1 + H2)."}
+plot3 = ggplot(bystander, aes(x = groups, y = Time, fill = Gender)) + 
+  stat_summary(geom = "bar", position = position_dodge2(.80)) +
+  labs(x = "Gruppe", y = "Zeit bis Hilfeleistung", fill = "Geschlecht") 
+
+plot1 = ggplot(bystander, aes(x = groups, y = Time)) + 
+  geom_boxplot() +
+  labs(x = "Gruppe", y = "Zeit bis Hilfeleistung")
+
+plot2 = ggplot(bystander, aes(x = Gender, y = Time)) + 
+  geom_boxplot() +
+  labs(x = "Geschlecht", y = "Zeit bis Hilfeleistung")
+
+cowplot::plot_grid(plot1, 
+                   plot2, 
+                   plot3, nrow = 2, labels = c("H1", "H2", "Interaktion"))
+
+```
+
+Bezogen auf unsere **dritte Hypothese (H3)** konnten wir zeigen, dass innerhalb der Gruppe von **5 Bystandern** die Zeit bis zur Hilfeleistung mit einem zusätzlichen Punkt im STAI_State um durchschnittlich `r round(r2$coefficients[4,1],2)` Minuten zunimmt. Die empfundene situative Angst scheint also ein hemmender Faktor für Hilfeleistung zu sein. 
+
+In der Bedingung von **20 Bystander** finden wir diesen Effekt ebenfalls. In dieser Bedingung steigt die Zeit bis zur Hilfeleistung mit einem zusätzlichen Punkt im STAI_State um durchschnittlich `r round(r3$coefficients[4,1],2)` Minuten. 
+
+In der Gruppe mit **100 Bystandern** wird keine signifikante Vorhersagekraft durch die Zustandsangst festgestellt. Aufgrund der signifikanten Moderationswirkung der Gruppenzuteilung können wir feststellen, dass der hemmende Effekt der Zustandsangst auf die Hilfeleistung mit kleinerer Gruppengröße zunimmt. Die beschriebenen Ergebnisse sind in (*figure2*) dargestellt. 
+
+```{r my-figure2, fig.cap = "Ergebnisse multiple Regression mit Interaktion (H3)"}
+ggplot(bystander, aes(x = STAI_State, y = Time, fill = groups)) + 
+  geom_point(aes(color=groups)) +
+  scale_color_manual(values = c("5" = "red", "20" = "green", "100" = "blue" )) +
+  geom_smooth(method = "lm") 
+```
+
+## Einschränkungen und Zusammenfassung
+
+Wie bereits ausgeführt, gibt es große Unterschiede zwischen Notfallsituationen in der analogen Welt - in welcher es leichter zu identifizieren sein mag, ob eine Person in Not ist oder nicht, und einer digitalen Umgebung - in der sich bedrohliche Situationen eher subtil und in Form von Cybermobbing äußern können. Zum einen entfällt im Web-Kontext die unmittelbare Wahrnehmung der Körpersprache von Täter:innen, Opfern und anwesenden Bystandern [@patterson2016adolescent], was zu Unsicherheiten in der Situationsdefinition führen kann und es einfacher macht, Aggressionen zu ignorieren. Doch auch die Operationalisierung von anwesenden Bystandern ist nicht so eindeutig wie in einer physischen Umgebung und erscheint unter Umständen artifiziell, was als eine Limitierung dieser Arbeit betrachtet werden kann. Die vorliegende Studie unterstützt jedoch die Ergebnisse anderer Arbeiten, die darauf hindeuten, dass der Bystander Effekt auch in einem digitalen Kontext von Relevanz ist. Mit dem zunehmenden Problem von Cybermobbing in unserer Gesellschaft wird es umso wichtiger, die dahinterstehenden Dynamiken zu verstehen und die Forschung dahingehend voranzutreiben. Es gibt bereits erste Hinweise, dass durch Aufklärungs- und Interventionsprogramme die Wahrscheinlichkeit erhöht werden kann, dass Zeugen von problematischen Situationen dazu bewegt werden, einzugreifen und nicht Opfer von Phänomenen wie dem Bystander Effekt werden [@santacrose2020intervene]. Jedoch bedarf es weiterer Forschung um diese komplexen Zusammenhänge vollumgreifend zu verstehen.
+
+
+\newpage
+
+# Beiträge der Einzelautor:innen
+
+An der Konzeption und Gestaltung beteiligt: Nico Steffen, Magdalena Schellenberger, Luisa Greer, Victoria Sackmann
+
+An der Datenerfassung beteiligt: Nico Steffen, Magdalena Schellenberger, Luisa Greer, Victoria Sackmann
+
+An der Analyse und Interpretation der Daten beteiligt: Nico Steffen, Magdalena Schellenberger, Luisa Greer, Victoria Sackmann
+
+Hat den Artikel verfasst und/oder überarbeitet: Nico Steffen
+
+Genehmigte die eingereichte Version zur Veröffentlichung: Nico Steffen, Magdalena Schellenberger, Luisa Greer, Victoria Sackmann
+
+# Danksagung
+
+Die Autoren danken Herrn Prof. Dr. Goerigk für die Unterstützung in methodischen Fragen. Die aktuelle Studie war Teil einer Hausarbeit im Seminar "Empirisch-wissenschaftliches Arbeiten" an der Charlotte Fresenius Hochschule München.
+
+# Informationen zur Finanzierung (Funding)
+
+Diese Forschung wurde von XXX finanziert.
+
+# Konkurrierende Interessen (Competing interests)
+
+Die Autoren haben keine konkurrierenden Interessen zu erklären.
+
+# Erklärung über die Zugänglichkeit von Daten
+
+Anonymisierte Daten, ein Codebuch, reproduzierbare Skripte sowie weitere ergänzende Materialien finden Sie unter XXX.
+
+# Literatur
+
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+```{=tex}
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+```
+::: {#refs}
+:::
+
+```{=tex}
+\endgroup
+```
+
+\newpage
+## Anhang - Prüfung der Voraussetzungen 
+# MANOVA
+
+1. Die abhängige Variable (Zeit bis zum Eingreifen) ist intervallskaliert
+2. Das untersuchte Merkmal ist normalverteilt
+```{r echo=FALSE}
+check_normality(model1)
+```
+3. Varianzhomogenität liegt vor:
+```{r echo=FALSE}
+check_homogeneity(model1)
+```
+4. Die Messwerte sind durch randomisierte Zuweisung unabhängig voneinander
+
+
+# Multiple Regression
+
+1. Die abhängige Variable (Zeit bis zum Eingreifen) ist intervallskaliert und normalverteilt
+```{r echo=FALSE}
+qqnorm(rstandard(model2), cex = 1.5)
+qqline(rstandard(model2))
+check_normality(model2)
+```
+2. Die Messwerte sind durch randomisierte Zuweisung unabhängig voneinander
+3. Die Zusammenhänge sind theoretisch linear
+```{r echo=FALSE}
+plot(bystander$STAI_State_cent, bystander$Time)
+lin.stai = lm(bystander$Time ~ bystander$STAI_State_cent, na.action = "na.exclude")
+abline(lin.stai)
+
+plot(bystander$groups, bystander$Time)
+lin.groups = lm(bystander$Time ~ bystander$groups, na.action = "na.exclude")
+abline(lin.groups)
+```
+4. Homoskedastizität ist gegeben 
+```{r echo=FALSE}
+plot(model2, 1, cex = 2)
+```
+5. Multikollinearität - Die Daten weisen auf Multikollinearitätsproblem hin
+Nach Korrelationsmatrix kein Problem
+```{r echo=FALSE}
+cor(bystander_numeric[,c("Time", "groups", "STAI_State")])
+```
+Die Werte von Toleranz und VIF weisen jedoch auf ein Multikollinearitätsproblem hin. Für unsere Analyse kontrollieren wir die Werte jedoch über die Gruppen hinweg.
+```{r echo=FALSE}
+ols_vif_tol(model2)
+```
+
+
+
+
