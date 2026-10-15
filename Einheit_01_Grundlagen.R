@@ -38,6 +38,8 @@
 3^2         # Potenz (Alternative: 3**2, ist aber unüblich)
 sqrt(9)     # Quadratwurzel: unsere erste FUNKTION
 
+?sqrt
+
 # Was ist eine Funktion? Ein Befehl mit runden Klammern: name(argumente).
 # In die Klammern kommt, womit die Funktion arbeiten soll.
 # Hilfe zu jeder Funktion: ?sqrt  (öffnet die Hilfe rechts unten)
@@ -55,7 +57,7 @@ sqrt(9)     # Quadratwurzel: unsere erste FUNKTION
 a = 100
 b = 3 / 100
 summe = a + b          # Mit Objekten kann man weiterrechnen
-quotient = (a + b) / b
+
 
 summe       # Objektname ausführen = Inhalt anzeigen
 
@@ -113,12 +115,20 @@ length(zahl)   # = 1
 # Numerische Vektoren
 j = c(1, 2, 3, 4, 5, 6, 7)
 k = 1:200                                    # ":" erzeugt ganzzahlige Folgen
-l = c(1:7, seq(from = 20, to = 30, by = 2))  # seq() für Folgen mit Schrittweite
 
 # Bei seq() müssen die Argumentnamen nicht ausgeschrieben werden, wenn die
 # Reihenfolge stimmt (from, to, by). Beides ist identisch:
 seq(from = 20, to = 30, by = 2)
 seq(20, 30, 2)
+
+l = c(1:7, seq(from = 20, to = 30, by = 2))  # seq() für Folgen mit Schrittweite
+
+#rnorm
+
+rnorm(100, 100, 15)
+
+
+
 # Ausgeschrieben ist es für Anfänger*innen aber lesbarer.
 
 # ÜBUNG: Erstellen Sie einen numerischen Vektor "CFH", der die Zahlen von 12 bis 54
@@ -143,6 +153,8 @@ length(CFH)   # Anzahl der Elemente
 sum(j)        # Summe
 mean(j)       # Mittelwert
 min(j); max(j)
+
+
 
 
 # 4.1 | Elemente aus Vektoren auswählen (INDIZIERUNG) --------------------------
@@ -199,7 +211,10 @@ levels(geschlecht)   # vorhandene Kategorien
 table(geschlecht)    # Häufigkeiten: die passende Statistik für Nominaldaten
 # mean(geschlecht)   # -> Warnung + NA. Gut so: R schützt uns jetzt vor Unsinn.
 
-##### Ende Michi Sitzung 1 14.10 #######
+
+
+
+##### Ende Michi & Nico Sitzung 1 14.10 #######
 
 
 # 5.2 | ORDINAL: geordneter Faktor -------------------------------------------
