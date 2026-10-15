@@ -199,6 +199,9 @@ levels(geschlecht)   # vorhandene Kategorien
 table(geschlecht)    # Häufigkeiten: die passende Statistik für Nominaldaten
 # mean(geschlecht)   # -> Warnung + NA. Gut so: R schützt uns jetzt vor Unsinn.
 
+##### Ende Michi Sitzung 1 14.10 #######
+
+
 # 5.2 | ORDINAL: geordneter Faktor -------------------------------------------
 
 # Bei ordinalen Daten gibt es eine Rangfolge. Mit ordered = TRUE weiß R das.
