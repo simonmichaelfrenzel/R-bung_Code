@@ -153,8 +153,11 @@ IQR(ymrs_noEW) # IQR = 75 %-Quartil - 25 %-Quartil
 install.packages("psych")
 library(psych)
 
-describeBy(bipolar, group = "groups")
+describe(bipolar)
+describeBy(bipolar, group = "groups") #man kann s auch Gruppieren 
 
-
-
-
+# va mean und SD und für eine  Publikation 
+install.packages("report")
+library(report)
+report_sample(bipolar) 
+report_sample(select(bipolar, groups, Sum_YMRS, Age), by = "groups")  
