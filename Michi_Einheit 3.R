@@ -153,7 +153,7 @@ IQR(ymrs_noEW) # IQR = 75 %-Quartil - 25 %-Quartil
 install.packages("psych")
 library(psych)
 
-describe(bipolar)
+describe(bipolar) # viele Argumente, prüfe auch im ?-verzeichnis
 describeBy(bipolar, group = "groups") #man kann s auch Gruppieren 
 
 # va mean und SD und für eine  Publikation 
