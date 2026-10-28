@@ -75,6 +75,8 @@ starwars
 # Aufgabe erstelle einen neuen datensatz starwars, der nur die ersten 11 Spalten von starwars enthält
 starwars = starwars[,1:11]
 
+# Bis hier gekommen, nochmal mit mean zeigen und NAs!!!
+
 str(starwars)
 View(starwars)
 head(starwars)
@@ -99,11 +101,10 @@ starwars %>% filter(mass < 80, eye_color == "blue")
 likert = sample(x = 1:5, size = 100, replace = TRUE)
 
 # Wiederholen rep()
-
 Gruppe = rep(c("Kontrollgruppe", "Interventionsgruppe"), each = 10)
 Gruppe = rep(c("Kontrollgruppe", "Interventionsgruppe"), times = 10)
 
-
+#Falls noch Zeit, einen große df Simulieren
 
 
 
