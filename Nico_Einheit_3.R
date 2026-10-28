@@ -9,8 +9,6 @@ mean(starwars$mass, na.rm = T)
 # Normalverteilung
 IQ = rnorm(100, 100, 15)
 
-# round!!!
-
 # Daten simulieren bsp likert items
 likert = sample(x = 1:5, size = 100, replace = TRUE)
 table(likert)
@@ -59,13 +57,80 @@ df_neu = read.csv("simulation.csv")
 
 bipolar = read.csv("bipolar.csv")
 
+head(bipolar)
+str(bipolar)
 View(bipolar)
-anyNA(starwars)
-summary(starwars$mass)
+anyNA(bipolar)
+summary(bipolar)
+
+# alle YMRS Items checken, passt die range in den Daten? Plausibel?
+# Aggregieren 
+
+bipolar$YMRS_1 + bipolar$YMRS_2
+rowSums(bipolar[,c("YMRS_1", "YMRS_2", "YMRS_2")])
+
+library(dplyr)
+?select
+select(bipolar, starts_with("YMRS"))
+rowSums(select(bipolar, starts_with("YMRS")))
+rowMeans(select(bipolar, starts_with("YMRS")))
+
+bipolar$sum_YMRS = rowSums(select(bipolar, starts_with("YMRS")))
+head(bipolar)
+summary(bipolar$sum_YMRS)
+
+# Warum sum_YMRS?
+bipolar$YMRS_sum = rowSums(select(bipolar, starts_with("YMRS")))
+
+sum(is.na(bipolar$sum_YMRS))
+
+table(bipolar$groups)
+# "EW": Intervention erhalten, "noEW": Intervention nicht erhalten
+
+# Werte einer Gruppe auswählen: logische Indizierung aus Einheit 1
+bipolar$sum_YMRS[bipolar$groups == "noEW"]
+bipolar$sum_YMRS[bipolar$groups == "EW"]
+
+mean(bipolar$sum_YMRS[bipolar$groups == "noEW"])
+mean(bipolar$sum_YMRS[bipolar$groups == "EW"])
+
+ymrs_EG = bipolar$sum_YMRS[bipolar$groups == "EW"]
+ymrs_KG = bipolar$sum_YMRS[bipolar$groups == "noEW"]
+
+length(ymrs_EG)
+length(ymrs_KG)
+table(bipolar$groups)
+
+mean(bipolar$sum_YMRS)
+round(mean(bipolar$sum_YMRS), 2)
+sd(bipolar$sum_YMRS)
+var(bipolar$sum_YMRS) # / n-1
 
 
+# Modalwert
+library(modeest)
+mfv(ymrs_EG)
+
+#Kontrolle
+table(ymrs_EG)
+range(ymrs_EG)
 
 
+# Base R: tapply(Variable, Gruppierung, Funktion)
+tapply(bipolar$sum_YMRS, bipolar$groups, mean)
+tapply(bipolar$sum_YMRS, bipolar$groups, sd)
+
+# tidyverse: group_by() + summarise() erzeugt eine übersichtliche Tabelle
+# (Pipe %>% lesen als "und dann"):
+bipolar %>%
+  group_by(groups) %>%
+  summarise(n       = n(),
+            M       = mean(sum_YMRS, na.rm = TRUE),
+            SD      = sd(sum_YMRS, na.rm = TRUE),
+            Median  = median(sum_YMRS, na.rm = TRUE),
+            IQR     = IQR(sum_YMRS, na.rm = TRUE),
+            Min     = min(sum_YMRS, na.rm = TRUE),
+            Max     = max(sum_YMRS, na.rm = TRUE))
 
 
 
