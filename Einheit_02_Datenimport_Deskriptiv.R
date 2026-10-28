@@ -8,8 +8,14 @@
 # was das Skript benötigt, und es läuft von oben nach unten ohne Fehler durch.
 # install.packages("tidyverse")   # einmalig, falls noch nicht installiert
 # install.packages("modeest")     # einmalig, falls noch nicht installiert
+# install.packages("psych")       # einmalig, falls noch nicht installiert
+# install.packages("report")      # einmalig, falls noch nicht installiert
 library(tidyverse)   # enthält u. a. dplyr (select, filter, ...) und ggplot2
 library(modeest)     # für den Modalwert
+library(psych)       # describe(), describeBy(): alle Kennwerte auf einen Blick
+library(report)      # report_sample(): Stichprobenbeschreibung für Paper
+# Beim Laden von psych erscheint eine Meldung, dass "%+%" und "alpha" aus ggplot2
+# "maskiert" werden. Das ist harmlos und für uns ohne Bedeutung.
 
 
 # 1 | DATA FRAME SPEICHERN -----------------------------------------------------
@@ -200,23 +206,29 @@ round(IQR(ymrs_EW), 2)
 
 # 5.3 | Ausblick: alle Gruppen auf einmal ---------------------------------------
 
-# Bisher haben wir jede Kennzahl für jede Gruppe einzeln berechnet. Das geht kürzer:
+# Bisher haben wir jede Kennzahl für jede Gruppe einzeln berechnet. Das geht kürzer
+# (siehe Online-Skript, Kapitel "Daten beschreiben"):
 
-# Base R: tapply(Variable, Gruppierung, Funktion)
-tapply(bipolar$sum_YMRS, bipolar$groups, mean)
-tapply(bipolar$sum_YMRS, bipolar$groups, sd)
+# describe() aus dem Paket psych: alle wichtigen Kennwerte auf einmal
+describe(bipolar$sum_YMRS)
+# Die wichtigsten Spalten der Ausgabe:
+#   n = Anzahl gültiger Werte, mean = Mittelwert, sd = Standardabweichung,
+#   median = Median, min / max, range = Spannweite
+# (trimmed, mad, skew, kurtosis und se brauchen wir hier noch nicht.)
+# Achtung: Den IQR gibt describe() standardmäßig NICHT aus, dafür weiter IQR() verwenden.
+# Fehlende Werte werden bei describe() automatisch ignoriert (kein na.rm nötig).
 
-# tidyverse: group_by() + summarise() erzeugt eine übersichtliche Tabelle
-# (Pipe %>% lesen als "und dann"):
-bipolar %>%
-  group_by(groups) %>%
-  summarise(n       = n(),
-            M       = mean(sum_YMRS, na.rm = TRUE),
-            SD      = sd(sum_YMRS, na.rm = TRUE),
-            Median  = median(sum_YMRS, na.rm = TRUE),
-            IQR     = IQR(sum_YMRS, na.rm = TRUE),
-            Min     = min(sum_YMRS, na.rm = TRUE),
-            Max     = max(sum_YMRS, na.rm = TRUE))
+# describeBy(): dieselben Kennwerte, aber getrennt nach Gruppe
+describeBy(bipolar$sum_YMRS, group = bipolar$groups)
+# Die Ausgabe enthält einen Block für "EW" und einen für "noEW".
+# Vergleichen Sie die Werte mit Ihren Ergebnissen aus 5.1 und 5.2. Stimmen sie überein?
+
+# describe() funktioniert auch für mehrere Variablen gleichzeitig (ganzer Data Frame):
+describe(select(bipolar, starts_with("YMRS")))
+
+# report_sample() aus dem Paket report: fertige Tabelle zur Stichprobenbeschreibung,
+# wie man sie direkt in einem Paper (oder der Hausarbeit) verwenden kann.
+report_sample(select(bipolar, groups, sum_YMRS), group_by = "groups")
 
 
 # 6 | Interpersonal Support Evaluation List (ISEL) -----------------------------
@@ -388,7 +400,9 @@ sd(bipolar$sum_ISEL[bipolar$groups == "noEW"], na.rm = TRUE)
 # var(), sd()             Varianz, Standardabweichung (Nenner n - 1)
 # quantile(), IQR()       Quartile, Interquartilsabstand
 # round(x, 2)             auf 2 Nachkommastellen runden
-# tapply()                Funktion getrennt nach Gruppen anwenden
+# describe()              alle Kennwerte auf einen Blick (Paket psych)
+# describeBy()            dasselbe getrennt nach Gruppen (Paket psych)
+# report_sample()         Stichprobentabelle für Paper (Paket report)
 # group_by() + summarise() Kennwerte-Tabelle nach Gruppen (dplyr)
 # recode()                Werte einzeln neu zuordnen (dplyr)
 # (Min + Max) - x         Items mathematisch umpolen
