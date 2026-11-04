@@ -5,7 +5,7 @@
 # 2. Read and Write 
 # 3. Bipolar Datensatz gruppenvariable bilden 
 
-# Heute: deskriptive Daten ausgeben + T-test und Darstellung
+# Heute: deskriptive Daten ausgeben + T-test und Darstellung + Korrelation und Darstellung 
 
 # Pakete 
 install.packages("tidyverse") 
@@ -145,4 +145,20 @@ ggplot(bipolar, aes(x = Sum_Isel, y = Sum_YMRS, color = groups)) +
   expand_limits(x = c(10, 27), y = c(10, 40)) +                   # Skala erweitern
   coord_cartesian(xlim = c(10, 27), ylim = c(10, 40), expand = FALSE) +  # Ausschnitt, + nicht vergessen!
   scale_color_manual(values = c("steelblue", "orange"))
+
+
+## Speichern einer Grafik
+
+png(file = "Figure1.png", width = 15, height = 10, units = "cm", res = 300)
+
+ggplot(bipolar, aes(x = Sum_Isel, y = Sum_YMRS, color = groups)) +
+  geom_point(size = 0.8, alpha = 0.7) +                          # Streudiagramm
+  geom_smooth(method = "lm", linewidth = 0.4, fullrange = TRUE) + # Linien pro Gruppe, ganzer Bereich
+  expand_limits(x = c(10, 27), y = c(10, 40)) +                   # Skala erweitern
+  coord_cartesian(xlim = c(10, 27), ylim = c(10, 40), expand = FALSE) +  # Ausschnitt, + nicht vergessen!
+  scale_color_manual(values = c("steelblue", "orange"))
+
+
+dev.off() # gibt an, dass Figur fertig und ready fürs Speichern durch png ist
+
 
