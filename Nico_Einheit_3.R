@@ -1,60 +1,33 @@
-library(tidyverse)
-
-head(starwars)
-starwars$mass
-mean(starwars$mass)
-mean(starwars$mass, na.rm = T)
 
 
-# Normalverteilung
-IQ = rnorm(100, 100, 15)
+df = data.frame(ID = 1:10,
+                age = rnorm(10, 22, 8),
+                likert = sample(x = c(1:4, NA), size = 10, replace = T),
+                group = rep(c("IG", "KG"), each = 5))
 
-# Daten simulieren bsp likert items
-likert = sample(x = 1:5, size = 100, replace = TRUE)
-table(likert)
-Buchstabe = sample(x = c("a", "b", "c"), size = 100, replace = TRUE, prob = c(0.5,0.25,0.25))
-table(Buchstabe)
+df$likert
+mean(df$likert, na.rm = T)
 
-# Wiederholen rep()
-Gruppe = rep(c("Kontrollgruppe", "Interventionsgruppe"), each = 10)
-Gruppe = rep(c("Kontrollgruppe", "Interventionsgruppe"), times = 10)
+saveRDS(df, file = "daten.rds")
+write.csv(df, file = "daten.csv")
+df_neu = read.csv("daten.csv")
+df_rds = readRDS("daten.rds")
 
-# Aufgabe: Simuliert folgenden Datensatz, der "df" heißen soll
-# Setze einen Seed (123) für Reproduzierbarkeit
-# N = 100
-# Erste Variable: ID = ab 101 fortlaufend
-# Zweite Variable: sex: 49% male, 49% female, 2% diverse
-# Dritte Variable: age: normalverteilte variable, MW = 40, SD = 10, gerundet auf ganze zahlen
-# vierte Variable: Item1 = Variable eines Likert-Fragebogens (Wertebereich 1 - 7), gleichverteilte Antworten
-# fünfte variable: population = die ersten 50 "clinical", die zweiten 50 "non_clinical"
+haven::read_sav()
+haven::write_sav()
 
-# schaue dir mit head() die ersten 6 Zeilen des Datensatzes an
-
-set.seed(123)
-df = data.frame(ID = 101:200,
-                sex = sample(x = c("male", "female", "diverse"), size = 100, replace = T, prob = c(.49, .49, .02)),
-                age = round(rnorm(100, 40, 10),0),
-                Item1 = sample(x = 1:5, size = 100, replace = T),
-                population = rep(c("clinical", "non_clinical"), each = 50))
-
-head(df)
-
-saveRDS(df, file = "simulation.rds")
-write.csv(df, file = "simulation.csv")
 
 # install.packages("haven")
-# install.packages("writexl")
-library(haven)
-library(writexl)
+# install.packages("readxl")
 
-write_sav(df, "df.sav")
+df_neu = read.csv("daten.csv")
+df_rds = readRDS("daten.rds")
 
-#test
+df_neu = df_neu[,-1]
 
-df_neu = read.csv("simulation.csv")
+
 
 # ersten richtigen df einlesen 
-
 bipolar = read.csv("bipolar.csv")
 
 head(bipolar)
@@ -69,11 +42,14 @@ summary(bipolar)
 bipolar$YMRS_1 + bipolar$YMRS_2
 rowSums(bipolar[,c("YMRS_1", "YMRS_2", "YMRS_2")])
 
-library(dplyr)
+library(tidyverse)
+
 ?select
 select(bipolar, starts_with("YMRS"))
 rowSums(select(bipolar, starts_with("YMRS")))
 rowMeans(select(bipolar, starts_with("YMRS")))
+
+# Frage, wenn wir neue Variable erstellen wollen, die die Summe enthält? 
 
 bipolar$sum_YMRS = rowSums(select(bipolar, starts_with("YMRS")))
 head(bipolar)
@@ -94,27 +70,6 @@ bipolar$sum_YMRS[bipolar$groups == "EW"]
 mean(bipolar$sum_YMRS[bipolar$groups == "noEW"])
 mean(bipolar$sum_YMRS[bipolar$groups == "EW"])
 
-ymrs_EG = bipolar$sum_YMRS[bipolar$groups == "EW"]
-ymrs_KG = bipolar$sum_YMRS[bipolar$groups == "noEW"]
-
-length(ymrs_EG)
-length(ymrs_KG)
-table(bipolar$groups)
-
-mean(bipolar$sum_YMRS)
-round(mean(bipolar$sum_YMRS), 2)
-sd(bipolar$sum_YMRS)
-var(bipolar$sum_YMRS) # / n-1
-
-
-# Modalwert
-library(modeest)
-mfv(ymrs_EG)
-
-#Kontrolle
-table(ymrs_EG)
-range(ymrs_EG)
-
 
 # Base R: tapply(Variable, Gruppierung, Funktion)
 tapply(bipolar$sum_YMRS, bipolar$groups, mean)
@@ -131,6 +86,83 @@ bipolar %>%
             IQR     = IQR(sum_YMRS, na.rm = TRUE),
             Min     = min(sum_YMRS, na.rm = TRUE),
             Max     = max(sum_YMRS, na.rm = TRUE))
+
+library(psych)
+describe(bipolar)
+describeBy(bipolar, group = bipolar$group)
+
+
+# ZIEL: Berechnung eines Summenscores 
+# ACHTUNG: Items 1, 2, 7, 8, 11, 12 müssen UMGEPOLT werden
+# Funktion "recode()"
+
+# Variante 1: Umgepolte Items werden als eigene Variable gekennzeichnet (Endung "_r", Primärdaten werden beibehalten)
+bipolar$ISEL_1_r = recode(bipolar$ISEL_1, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_2_r = recode(bipolar$ISEL_2, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_7_r = recode(bipolar$ISEL_7, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_8_r = recode(bipolar$ISEL_8, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_11_r = recode(bipolar$ISEL_11, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_12_r = recode(bipolar$ISEL_12, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+
+# Variante 2: Umgepolte Items werden überschrieben
+# Einfacher, um später Summenscore zu bilden: Logik "starts_with("ISEL" kann beibehalten werden
+bipolar$ISEL_1 = recode(bipolar$ISEL_1, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_2 = recode(bipolar$ISEL_2, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_7 = recode(bipolar$ISEL_7, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_8 = recode(bipolar$ISEL_8, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_11 = recode(bipolar$ISEL_11, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+bipolar$ISEL_12 = recode(bipolar$ISEL_12, "1" = 4, "2" = 3, "3" = 2, "4" = 1)
+
+# Variante 3 Mathematisch
+bipolar$ISEL_1 = 5 - bipolar$ISEL_1
+bipolar$ISEL_2 = 5 - bipolar$ISEL_2
+bipolar$ISEL_7 = 5 - bipolar$ISEL_7
+bipolar$ISEL_8 = 5 - bipolar$ISEL_8
+bipolar$ISEL_11 = 5 - bipolar$ISEL_11
+bipolar$ISEL_12 = 5 - bipolar$ISEL_12
+
+
+bipolar$sum_ISEL = rowMeans(select(bipolar, starts_with("ISEL")))
+
+summary(bipolar$sum_ISEL)
+describe(bipolar$sum_ISEL)
+describeBy(bipolar$sum_ISEL, group = bipolar$groups)
+
+
+
+
+
+library(report)
+vars = bipolar[, c("Age", "Gender", "Employed", "Comorbidities", "Previous_Ep", "Education_years", "Onset_age", "sum_YMRS", "groups")]
+table1 = report_sample(vars, by = "groups")
+
+table1$Variable[2] = "Geschlecht_m"
+
+library(flextable)
+flextable(table1)
+
+library(apaTables)
+
+
+
+# t-test
+
+shapiro.test(bipolar$YMRS_sum[bipolar$groups == "noEW"])
+shapiro.test(bipolar$YMRS_sum[bipolar$groups == "EW"])
+by(bipolar$sum_YMRS, bipolar$groups, shapiro.test)
+
+qqnorm(bipolar$YMRS_sum[bipolar$groups == "EW"])
+qqline(bipolar$YMRS_sum[bipolar$groups == "EW"])
+
+hist(bipolar$YMRS_sum[bipolar$groups == "EW"])
+
+library(car)
+leveneTest(sum_YMRS ~ groups, data = bipolar, center ="mean") #mean = normale levene test, median ist etwas robuster
+
+t.test(sum_YMRS ~ groups, data = bipolar)
+
+
+
 
 
 
