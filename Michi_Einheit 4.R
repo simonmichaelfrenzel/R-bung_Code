@@ -112,7 +112,7 @@ ggplot(data = bipolar, aes(x = groups, y= Sum_YMRS)) +
 # alpha: transparent
 
 # Farben: 
-geom_boxplot(width = 0.4, alpha = 0.3, fill = "lightblue", color = "black")
++ geom_boxplot(width = 0.4, alpha = 0.3, fill = "lightblue", color = "black")
 
 
 ### Korrelation & Streudiagramm
@@ -123,7 +123,7 @@ bipolar$Sum_Isel = rowSums(select(bipolar, starts_with("ISEL_") & ends_with("r")
 
 #2. Correlation
 ?cor.test
-cor.test(bipolar$Sum_YMRS,bipolar$Sum_YMRS, method= "pearson")
+cor.test(bipolar$Sum_Isel, bipolar$Sum_YMRS, method= "pearson")
 
 #3. Streudiagramm mit ggplot 
 ggplot(bipolar, aes(x = Sum_Isel, y=Sum_YMRS)) +
@@ -133,6 +133,12 @@ ggplot(bipolar, aes(x = Sum_Isel, y=Sum_YMRS)) +
   coord_cartesian(xlim = c(10, 27), ylim = c(10, 40)) #Skalen anpassen
 
 # Nach Gruppen aufteilen 
+#1 in aes()  --> color = groups
+#2 in geemo_smooth "color entfernen 
+# ausführen
+#3  + scale_color_manual(values = c("steelblue", "orange"))
+
+
 ggplot(bipolar, aes(x = Sum_Isel, y = Sum_YMRS, color = groups)) +
   geom_point(size = 0.8, alpha = 0.7) +                          # Streudiagramm
   geom_smooth(method = "lm", linewidth = 0.4, fullrange = TRUE) + # Linien pro Gruppe, ganzer Bereich
