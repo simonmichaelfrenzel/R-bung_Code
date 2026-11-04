@@ -82,6 +82,12 @@ str(bipolar)
 t.test(bipolar$Sum_YMRS ~ bipolar$groups, var.equal = F,  alternative = "less") 
 # wenn, char-var --> alphabetische reihenfolge: EW < noEW
 # standard bei var.equal = F --> dh Welch-test, T --> Student-T-test
+# car::leveneTest(Sum_YMRS ~ groups, data = bipolar)
+# effsize::cohen.d(Sum_YMRS ~ groups, data = bipolar)
+
+#t.test(bipolar$Sum_YMRS ~ bipolar$groups)$statistic -> t
+#$parameter -> df
+#$p.value -> pvalue
 
 #Darstellung der Ergebnisse --> ggplot 
 
