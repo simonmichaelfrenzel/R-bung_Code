@@ -439,10 +439,7 @@ starwars %>% filter(height > 180, eye_color == "blue") %>% nrow()
 #   ob unsere Auswertung sie wiederfindet.
 # - So kann man Stichprobenvariation sichtbar machen (-> Statistikvorlesung).
 
-# set.seed(): Zufallszahlen sind in R nur "pseudo-zufällig". Mit derselben
-# Startzahl erhalten alle im Raum exakt dieselben Zufallszahlen.
-# Ohne set.seed() sieht bei jeder Person (und bei jedem Ausführen) alles anders aus.
-set.seed(42)
+ 
 
 # 9.1 | Normalverteilte Werte: rnorm() ---------------------------------------
 

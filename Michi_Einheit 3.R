@@ -3,22 +3,22 @@
 # Heute: "einfacher filtern", "Daten simulieren", "einlesen von realen Datensätzen"
 
 
-## filter()- Funktion ##
+## filter() - Funktion ##
 
 #install.packages("tidyverse")
-library(tidyverse)
+#library(tidyverse)
 starwars = as.data.frame(starwars[, 1:11])
 
 filter(.data, ..., .by, .preserve)
 #.by = Gruppierung. d.h. bei uns: "mean" wird für jede Spezies berechnet 
-#. preserve = True --> leere Gruppen bleiben erhalten/ default = true
+#. preserve = True --> leere Gruppen bleiben erhalten/ default = F
 
 filter(starwars, height > mean(height, na.rm=TRUE), .by= species)
 
 
 ## Daten simulieren ##
 
-# Wozu: Üben ohne sensible Daten ABER auch: Zufällige Ziehungen für manche stat. Methoden 
+# Wozu: Üben ohne sensible Daten; ABER auch: Zufällige Ziehungen für manche stat. Methoden 
 
 # set.seed(): Zufallszahlen sind in R nur "pseudo-zufällig". Mit derselben
 # Startzahl erhalten alle im Raum exakt dieselben Zufallszahlen.
@@ -53,12 +53,11 @@ studie = data.frame(
 install.packages("tidyverse")   # einmalig, falls noch nicht installiert
 install.packages("modeest")     # einmalig, falls noch nicht installiert
 install.packages("haven")
-install.packages("writexl")
 
 library(tidyverse)   # enthält u. a. dplyr (select, filter, ...) und ggplot2
 library(modeest)     # für den Modalwert
 library(haven)
-library(writexl)
+
 
 
 # erstmal schaun, wo wir hinspeichern 
@@ -78,8 +77,13 @@ read.csv("studie.csv")
 write_sav() # spss Files aus haven-Paket
 read_sav()
 
+
 saveRDS() # R intern, lädt schnell 
 readRDS()
+
+writexl::write_xlsx(studie, "studie.xlsx") #Excel 
+readxl::read_excel("studie.xlsx")
+
 
 ## Mit echten Daten arbeiten ## 
 
@@ -104,60 +108,10 @@ rowSums(bipolar[, c("YMRS_1", "YMRS_2")])
 bipolar$Sum_YMRS = rowSums(select(bipolar, starts_with("YMRS_")))
 
 # Frage: Warum Sum_YMRS und nicht YMRS_Sum?
+
 #Hinweis: N.A. in Items --> gesamte Summe ist N.A.
 sum(is.na(bipolar$sum_YMRS)) # wie viele n.A. sind drinnen?
 
-## Deskriptve Daten ## 
-
-#Gruppieren nach Intervention bzw nicht Intervention 
-
-table(bipolar$groups) 
-ymrs_noEW = bipolar$Sum_YMRS[bipolar$groups == "noEW"]
-ymrs_EW   = bipolar$Sum_YMRS[bipolar$groups == "EW"]
+### bis hier geschaftt ####
 
 
-#Zentrale Tendenz
-mean(ymrs_noEW)
-median(ymrs_noEW)
-# MODALWERT: In R gibt es dafür keine eingebaute Funktion. --> modest
-mfv(ymrs_noEW)
-# Kontrolle
-table(ymrs_noEW)
-
-#Hinweis: n.a.? --> na.rm = TRUE
-
-
-#Streuungsmaße 
-# SPANNWEITE (Range)
-min(ymrs_noEW)
-max(ymrs_noEW)
-range(ymrs_noEW)         # Minimum und Maximum zusammen
-diff(range(ymrs_noEW))   # Spannweite = Maximum - Minimum
-
-#VARIANZ & Standardabweichung
-round(var(ymrs_noEW), 2)
-round(sd(ymrs_noEW), 2)
-
-# WICHTIG: var() und sd() teilen durch n - 1, nicht durch n!
-# Das ist die Stichprobenschätzung der Populationsvarianz (aus der Statistikvorlesung).
-# umrechnen über var(x) * (n - 1) / n
-
-#Quantile und Interquartilsabstand
-quantile(ymrs_noEW) # gibt alle aus 
-IQR(ymrs_noEW) # IQR = 75 %-Quartil - 25 %-Quartil
-
-# IQR(), var(), sd(), quantile() stammen aus dem Paket "stats". Dieses gehört zu R
-# und ist immer schon geladen. Kein install.packages() oder library() nötig!
-
-#Schneller
-install.packages("psych")
-library(psych)
-
-describe(bipolar) # viele Argumente, prüfe auch im ?-verzeichnis
-describeBy(bipolar, group = "groups") #man kann s auch Gruppieren 
-
-# va mean und SD und für eine  Publikation 
-install.packages("report")
-library(report)
-report_sample(bipolar) 
-report_sample(select(bipolar, groups, Sum_YMRS, Age), by = "groups")  
