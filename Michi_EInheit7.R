@@ -47,9 +47,13 @@ ki = confint(reg)
 ki = as.data.frame(ki)
 
 p = tab$`Pr(>|t|)`
+
 #ifelse(test, ja, nein)
 p_wert = ifelse(p < .001, "< .001", sub( "^0", "", formatC(p, format = "f", digits = 3))) 
 # Ende führende 0 entfernen, FormatC -- in Format x.xxx
+
+
+### EVTL: Hier schon for und if 
 
 
 t = data.frame(Effekt = c("Intercept", "Behandlungsversuche"),
@@ -82,6 +86,33 @@ ft = autofit(ft) # Zeilengröße an Inhalt fitten
 
 save_as_docx(ft, path = "Tabelle3.docx")
 
+
+## for und if schleifen ##
+
+# oben: ifelse(test, yes, no)
+
+
+for( variable in vektor){ }
+#in" heißt: „Nimm nacheinander jedes Element aus diesem Vektor.“
+
+if(Bedingung){Führe aus, wenn wahr }else{ Führe aus, wenn Falsch } 
+
+
+# Übung: p-value richtig Anzeigen. 
+# Wenn p < 0.001
+# dann  p = "< .001"
+# sonst  p = round(p, 3)
+
+for(i in 1:2){
+if(p[i] < 0.001 ){p[i] = "< .001"}else{ p[i] = round(as.numeric(p[i]),3)}
+}
+
+
+
+
+# Andere Beispiele. 
+# 1. Variablen umkodieren. "Für jede Variable 1,2,4,6 XY ausführen 
+# 2. bestimmte Werte auswählen. "Nur Vps berücksichtigen, die einen Cut-Off überschreiten 
 
 
 
