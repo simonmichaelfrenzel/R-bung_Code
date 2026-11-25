@@ -38,7 +38,7 @@ anova(mod2)
 library(afex)
 
 mod3 = aov_ez(dv = "Symptoms", between = c("Therapy", "Diagnosis"), id = "ID", data = df)
-?aov_ez()
+?aov_ez
 
 # grafisch: Wie zeigen sich die Effekte hier?
 library(ggplot2)
@@ -92,9 +92,10 @@ df$Sport = c(3.5, 4.0, 8.0, 4.0, 5.0, 6.0, 5.5, 7.0, 4.0, 3.5,
 # 2. NV der Resiuden
   #grafisch: qqnorm
   
-  # stres =rstandard(reg) #standarditiserte Residuen 
-  # qqnorm(stres)
-  # qqline(stres)
+  stres =rstandard(reg) #standarditiserte Residuen
+  qqnorm(stres)
+  qqline(stres)
+  
   # einfacher: 
   ?plot.lm
   plot(reg,2) #macht alles automatisch
@@ -105,15 +106,14 @@ df$Sport = c(3.5, 4.0, 8.0, 4.0, 5.0, 6.0, 5.5, 7.0, 4.0, 3.5,
   # an dieser Rangposition erwarten würde. Weicht er nach unten ab, ist er kleiner.
   
   # statistisch: Shapiro-Wilk-Test
-  
   shapiro.test(stres)
   
  # 3. Homoskedastiziät
-  # Streuung der Residuen über den gesamten Wertebereich gleich groß ?
+  # Streuung der Residuen über den gesamten Wertebereich gleich groß?
   #grafisch:
   plot(reg,1) # keine Systematik in den Punkten + rote Linie ungefägr horizontal 
   
-  #test: Breusch-Pagan Test (= ähnliche idee wie Levene test der ANOVA, Gleicheit der Gruppenvarianzen)
+  #test: Breusch-Pagan Test (= ähnliche Idee wie Levene test der ANOVA, Gleicheit der Gruppenvarianzen)
   lmtest::bptest(reg)
 
 
